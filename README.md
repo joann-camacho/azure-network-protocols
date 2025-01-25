@@ -11,7 +11,7 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 - Microsoft Azure (Virtual Machines/Computer)
 - Remote Desktop
 - Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
+- Various Network Protocols (SSH, RDH, ICMP)
 - Wireshark (Protocol Analyzer)
 
 <h2>Operating Systems Used </h2>
@@ -21,19 +21,25 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 
 <h2>High-Level Steps</h2>
 
-  ***Prereq: Create a Windows VM and Ubuntu (Linux) VM. Then, remote login to Windows VM*** 
+ ***A- Prereq: Create a Windows VM and Ubuntu (Linux) VM. Then, remote login to Windows VM*** 
   
 - Step 1: Install [Wireshark](https://www.wireshark.org) in the Windows VM to observe Packet tracing.
 - Step 2: Attempt to ping Linux VM in Windows VM using Powershell. Observe the traffic in Wireshark
 - Step 3: Verify the Windows VM MAC Address is the same.
 
-  ***Configuring A Firewall Network Security Group***
+ ***B- Configuring A Firewall Network Security Group***
 
 - Step 1: Initiate a perpetual/non-stop ping from your Windows 10 VM to your Ubuntu VM
 - Step 2: Open the Network Security Group your Ubuntu VM is using and disable incoming (inbound) ICMP traffic
 - Step 3: Back in the Windows 10 VM, observe the ICMP traffic in WireShark and the command line Ping activity
 - Step 4: Re-enable ICMP traffic for the Network Security Group your Ubuntu VM
 - Step 5: Back in the Windows 10 VM, observe the ICMP traffic in WireShark and the command line Ping activity (should start working). After, stop the ping activity.
+
+***C- SSH Network Protocol***
+
+- Step 1: Start the Wireshark analyzer, in your Windows VM, and filter for SSH traffic only
+- Step 2: From your Windows 10 VM, “SSH into” your Ubuntu Virtual Machine (via its private IP address)
+- Step 3: 
 
 
 <h2>Actions and Observations</h2>
@@ -95,6 +101,7 @@ Step 2: In Azure select your Ubuntu VM. In the Overview section > Networking > N
 notice back in the Windows VM - the ongoing ping timed out in Powershell AND only Request is shown in Wireshark. This means the NSG rule worked!
 
 ![image](https://github.com/user-attachments/assets/dc73c60a-bb90-4176-984d-63c5a6de4714)
+</p>
 
 Delete the NSG rule in Azure and notice the ongoing ping is now functioning again. 
 
@@ -106,3 +113,39 @@ Delete the NSG rule in Azure and notice the ongoing ping is now functioning agai
 </p>
 <br />     
       
+***C- SSH Network Protocol***
+
+<p>
+Step 1: In the Windows VM, start a packet capture using  [Wireshark](https://www.wireshark.org). Use the filter search and type: SSH.
+</p>
+<p>
+ 
+![image](https://github.com/user-attachments/assets/723c962a-ae7d-4f8e-b7bc-865d9c3bfc83)  
+</p>
+
+(After installing Wireshark licensing terms) Open Wireshark. Double-click on 'Ethernet' to view IP traffic. This traffic is the IP packets reciprocating in the background while using the computer. 
+<p>
+  
+![image](https://github.com/user-attachments/assets/8a7ba9ea-4008-4fce-9bd1-5a96153ddd3c)  
+</p>
+<br />
+
+<p>
+Step 2: In Powershell "SSH into" the Linux VM by typing: ssh labuser1@<private IP address>. (the private IP address must be the Linux VM, which is 10.1.0.5). Notice that communication (secured traffic) is observed on the Wireshark analyzer. Enter the Linux VM password you created. (When typing the password, no letter will appear for security reasons.) You will see that more traffic was analyzed in Wireshark. Once the password is validated and confirmed notice the green hostname is now the Linux VM name.
+</p>
+<p>
+ 
+![image](https://github.com/user-attachments/assets/cffd25bf-8678-4188-b3ac-7b68ad2be7bb)
+  
+</p>
+<br />
+
+<p>
+Step 3: Type: 'hostname', to verify the server. Type 'id', to verify the user name.  Type 'exit' to exit out of the Linus VM server. 
+</p>
+<p>
+  
+![image](https://github.com/user-attachments/assets/2e23ebd1-0da0-410c-accd-51af635320d4)
+  
+</p>
+<br />
